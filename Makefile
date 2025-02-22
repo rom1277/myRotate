@@ -9,7 +9,7 @@ rebuild: clean build
 test: build
 	@echo "$(GREEN)Running tests...$(RESET)"
 	@echo "$(GREEN)test1 flag$(RESET)"
-	./myRotate -a ../test go.mod Makefile myRotate.go
+	./myRotate -a test go.mod Makefile myRotate.go
 	@echo "--------------------------------------------------------------------------"
 	@echo "$(GREEN)test2 $(RESET)"
 	./myRotate go.mod Makefile myRotate.go

@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 // -a поместит в папку архив
@@ -22,19 +23,19 @@ func main() {
 		fmt.Println("Error: files not provided.")
 		return
 	}
-
+	var wg sync.WaitGroup
 	for _, file := range files {
-
-		if err := rotate(file, *aflag); err != nil {
+		wg.Add(1)
+		if err := rotate(file, *aflag, &wg); err != nil {
 			fmt.Println("Error: ", err)
 		}
 
 	}
-
-	fmt.Println(*aflag, files, len(files))
+	wg.Wait()
 }
 
-func rotate(filepath1, archiveDir string) error {
+func rotate(filepath1, archiveDir string, wg *sync.WaitGroup) error {
+	defer wg.Done()
 	fileInfo, err := os.Stat(filepath1)
 	if err != nil {
 		return fmt.Errorf("failed to get file info for '%s': %w", filepath1, err)
